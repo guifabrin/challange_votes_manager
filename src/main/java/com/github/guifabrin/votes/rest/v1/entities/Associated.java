@@ -19,7 +19,7 @@ public class Associated {
 
     private String name;
 
-    private String password;
+    private String password = "";
 
     public String getName() {
         return name;
@@ -44,5 +44,4 @@ public class Associated {
     public void setName(String name) {
         this.name = name;
     }
-
 }
