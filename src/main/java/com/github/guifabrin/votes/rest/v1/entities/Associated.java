@@ -4,19 +4,17 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.github.guifabrin.votes.rest.v1.utils.ChyperUtils;
 
 @Entity
+@Table(name = "associated", uniqueConstraints = { @UniqueConstraint(columnNames = { "cpf" }) })
 public class Associated {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
     private String cpf;
 
     private String name;
@@ -27,11 +25,11 @@ public class Associated {
         return name;
     }
 
-    public String getCpf() {
+    public String getCPF() {
         return cpf;
     }
 
-    public void setCpf(String cpf) {
+    public void setCPF(String cpf) {
         this.cpf = cpf;
     }
 
