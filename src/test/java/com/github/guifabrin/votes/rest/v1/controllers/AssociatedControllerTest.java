@@ -5,7 +5,6 @@ import com.github.guifabrin.votes.rest.v1.entities.Associated;
 import com.github.guifabrin.votes.rest.v1.repositories.AssociatedRepository;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
@@ -43,16 +42,15 @@ public class AssociatedControllerTest {
 
     @BeforeEach
     public void setup() throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        List<Associated> someEntitys = new ArrayList<>();
+        List<Associated> entities = new ArrayList<>();
         Associated associated = new Associated();
         associated.setCPF("01661695019");
         associated.setName("Guilherme Fabrin Franco");
         associated.setPassword("123456Guii*");
-        someEntitys.add(associated);
-        when(repository.findAll()).thenReturn(someEntitys);
+        entities.add(associated);
+        when(repository.findAll()).thenReturn(entities);
     }
 
-    @Order(1)
     @Test
     void creation() throws Exception {
         Associated associated = new Associated();

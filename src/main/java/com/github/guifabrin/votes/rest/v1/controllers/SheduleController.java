@@ -2,8 +2,8 @@ package com.github.guifabrin.votes.rest.v1.controllers;
 
 import java.util.List;
 
-import com.github.guifabrin.votes.rest.v1.entities.Associated;
-import com.github.guifabrin.votes.rest.v1.repositories.AssociatedRepository;
+import com.github.guifabrin.votes.rest.v1.entities.Shedule;
+import com.github.guifabrin.votes.rest.v1.repositories.SheduleRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,44 +17,45 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class AssociatedController {
+public class SheduleController {
 
     @Autowired
-    public AssociatedRepository repository;
+    public SheduleRepository repository;
 
-    private Associated getAssociatedByCPF(String cpf) {
-        for (Associated record : repository.findAll())
-            if (record.getCPF().equals(cpf))
+    private Shedule getSheduleById(Long id) {
+        for (Shedule record : repository.findAll())
+            if (record.getId().equals(id))
                 return record;
         return null;
     }
 
-    @GetMapping("/associated/list")
-    List<Associated> all() {
+    @GetMapping("/shedule/list")
+    List<Shedule> all() {
         return repository.findAll();
     }
 
-    @PostMapping("/associated/add")
-    ResponseEntity<Associated> newAssociated(@RequestBody Associated associated) {
-        if (getAssociatedByCPF(associated.getCPF()) == null)
-            return new ResponseEntity<>(repository.save(associated), HttpStatus.CREATED);
-        return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+    @PostMapping("/shedule/add")
+    ResponseEntity<Shedule> newShedule(@RequestBody Shedule shedule) {
+        return new ResponseEntity<>(repository.save(shedule), HttpStatus.CREATED);
     }
 
-    @PutMapping("/associated/edit/{cpf}")
-    ResponseEntity<Associated> update(@PathVariable("cpf") String cpf, @RequestBody Associated associated) {
-        Associated record = getAssociatedByCPF(cpf);
+    @PutMapping("/shedule/edit/{id}")
+    ResponseEntity<Shedule> update(@PathVariable("id") Long id, @RequestBody Shedule shedule) {
+        Shedule record = getSheduleById(id);
         if (record == null)
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
-        record.setName(associated.getName());
+        record.setName(shedule.getName());
+        record.setDescription(shedule.getDescription());
+        record.setStartDate(shedule.getStartDate());
+        record.setMinutes(shedule.getMinutes());
         repository.save(record);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
-    @DeleteMapping("/associated/del/{cpf}")
-    ResponseEntity<Associated> delete(@PathVariable("cpf") String cpf) {
-        Associated record = getAssociatedByCPF(cpf);
+    @DeleteMapping("/shedule/del/{id}")
+    ResponseEntity<Shedule> delete(@PathVariable("id") Long id) {
+        Shedule record = getSheduleById(id);
         if (record == null)
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         repository.delete(record);
