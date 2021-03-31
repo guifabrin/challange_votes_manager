@@ -25,7 +25,7 @@ public class AuthFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         String path = httpRequest.getRequestURI();
-        if (!"/".equals(path) && !path.startsWith("/api/v1/associated/login/") && !"/js/index.js".equals(path)) {
+        if (!"/".equals(path) && !path.startsWith("/api/v1/associated/login/") && !"/js/index.bundle.js".equals(path)) {
             Associated authAssociated = AuthManager.getByUUID(httpRequest.getHeader("uuid"));
             if (authAssociated == null)
                 httpResponse.sendError(HttpStatus.UNAUTHORIZED.value());

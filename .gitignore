@@ -33,3 +33,6 @@ build/
 .vscode/
 
 *.db
+
+node_modules/
+src/main/resources/static/js/

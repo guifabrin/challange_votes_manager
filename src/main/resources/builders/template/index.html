@@ -1,0 +1,77 @@
+<div class="container">
+    <div class="row justify-content-md-center mt-3" v-if="!uuid">
+        <div class="col col-md-4">
+            <div class="mb-3">
+                <label for="cpf" class="form-label">CPF</label>
+                <input type="text" class="form-control" v-model="cpf">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Senha</label>
+                <input type="password" class="form-control" v-model="password">
+            </div>
+            <button type="button" class="btn btn-primary" v-on:click="login">Entrar</button>
+        </div>
+    </div>
+
+
+    <div class="row justify-content-md-center mt-3" v-else>
+        <div class="col col-md-12">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="associated-tab" data-bs-toggle="tab"
+                        data-bs-target="#associated" type="button" role="tab" aria-controls="associated"
+                        aria-selected="true">Associados</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="shedule-tab" data-bs-toggle="tab" data-bs-target="#shedule"
+                        type="button" role="tab" aria-controls="shedule" aria-selected="false">Profile</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="associated" role="tabpanel" aria-labelledby="associated-tab">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">CPF</th>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="associated in associateds" :key="associated.cpf">
+                                <td>{{associated.cpf}}</td>
+                                <td>{{associated.name}}</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="shedule" role="tabpanel" aria-labelledby="shedule-tab">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Id</th>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Descrição</th>
+                                <th scope="col">Sim</th>
+                                <th scope="col">Não</th>
+                                <th scope="col">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="shedule in shedules" :key="shedule.id">
+                                <th>{{shedule.id}}</th>
+                                <td>{{shedule.name}}</td>
+                                <td>{{shedule.description}}</td>
+                                <td>{{shedule.yesVotes}}</td>
+                                <td>{{shedule.noVotes}}</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
