@@ -22,17 +22,17 @@ public class SheduleController {
     @Autowired
     public SheduleRepository repository;
 
-    @GetMapping("/shedule/list")
+    @GetMapping("/api/v1//shedule/list")
     List<Shedule> all() {
         return repository.findAll();
     }
 
-    @PostMapping("/shedule/add")
+    @PostMapping("/api/v1//shedule/add")
     ResponseEntity<Shedule> add(@RequestBody Shedule shedule) {
         return new ResponseEntity<>(repository.save(shedule), HttpStatus.CREATED);
     }
 
-    @PutMapping("/shedule/edit/{id}")
+    @PutMapping("/api/v1//shedule/edit/{id}")
     ResponseEntity<Shedule> update(@PathVariable("id") Long id, @RequestBody Shedule shedule) {
         Shedule record = repository.getOne(id);
         if (record == null)
@@ -46,7 +46,7 @@ public class SheduleController {
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
-    @DeleteMapping("/shedule/del/{id}")
+    @DeleteMapping("/api/v1//shedule/del/{id}")
     ResponseEntity<Shedule> delete(@PathVariable("id") Long id) {
         Shedule record = repository.getOne(id);
         if (record == null)

@@ -28,12 +28,12 @@ public class VoteController {
     @Autowired
     public SheduleRepository sheduleRepository;
 
-    @GetMapping("/vote/list")
+    @GetMapping("/api/v1//vote/list")
     List<Vote> all() {
         return repository.findAll();
     }
 
-    @PostMapping("/vote/{sheduleId}/{cpf}")
+    @PostMapping("/api/v1//vote/{sheduleId}/{cpf}")
     ResponseEntity<Vote> add(@RequestBody Vote vote, @PathVariable("sheduleId") Long sheduleId,
             @PathVariable("cpf") String cpf) {
         Associated associated = associatedRepository.getOne(cpf);
