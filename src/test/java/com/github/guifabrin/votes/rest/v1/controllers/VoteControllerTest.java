@@ -57,6 +57,7 @@ public class VoteControllerTest {
         AuthManager.setAssociatedSession("random-uuid", associated);
 
         assertTrue(controller.add(vote, shedule.getId(), "random-uuid").getStatusCode() == HttpStatus.CREATED);
+        AuthManager.clear();
         controller.clear();
         associatedController.clear();
         sheduleController.clear();
