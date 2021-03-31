@@ -3,7 +3,6 @@ package com.github.guifabrin.votes.rest.v1.entities;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashSet;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -35,10 +34,6 @@ public class Shedule {
 
     public String getDescription() {
         return description;
-    }
-
-    public Collection<Vote> getVotes() {
-        return votes;
     }
 
     public void setVotes(Collection<Vote> votes) {
@@ -83,5 +78,13 @@ public class Shedule {
 
     public void addVote(Vote vote) {
         votes.add(vote);
+    }
+
+    public Long getYesVotes() {
+        return this.votes.stream().filter(vote -> vote.isVote()).count();
+    }
+
+    public Long getNoVotes() {
+        return this.votes.stream().filter(vote -> !vote.isVote()).count();
     }
 }

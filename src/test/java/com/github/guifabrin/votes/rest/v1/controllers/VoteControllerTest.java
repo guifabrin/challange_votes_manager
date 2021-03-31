@@ -1,5 +1,6 @@
 package com.github.guifabrin.votes.rest.v1.controllers;
 
+import com.github.guifabrin.votes.rest.v1.components.AuthManager;
 import com.github.guifabrin.votes.rest.v1.entities.Associated;
 import com.github.guifabrin.votes.rest.v1.entities.Shedule;
 import com.github.guifabrin.votes.rest.v1.entities.Vote;
@@ -53,7 +54,9 @@ public class VoteControllerTest {
         associatedController.add(associated);
         sheduleController.add(shedule);
 
-        assertTrue(controller.add(vote, shedule.getId(), associated.getCPF()).getStatusCode() == HttpStatus.CREATED);
+        AuthManager.setAssociatedSession("random-uuid", associated);
+
+        assertTrue(controller.add(vote, shedule.getId(), "random-uuid").getStatusCode() == HttpStatus.CREATED);
         controller.clear();
         associatedController.clear();
         sheduleController.clear();
