@@ -22,28 +22,21 @@ public class AssociatedController {
     @Autowired
     public AssociatedRepository repository;
 
-    private Associated getAssociatedByCPF(String cpf) {
-        for (Associated record : repository.findAll())
-            if (record.getCPF().equals(cpf))
-                return record;
-        return null;
-    }
-
     @GetMapping("/associated/list")
     List<Associated> all() {
         return repository.findAll();
     }
 
     @PostMapping("/associated/add")
-    ResponseEntity<Associated> newAssociated(@RequestBody Associated associated) {
-        if (getAssociatedByCPF(associated.getCPF()) == null)
+    ResponseEntity<Associated> add(@RequestBody Associated associated) {
+        if (repository.getOne(associated.getCPF()) == null)
             return new ResponseEntity<>(repository.save(associated), HttpStatus.CREATED);
         return new ResponseEntity<>(null, HttpStatus.CONFLICT);
     }
 
     @PutMapping("/associated/edit/{cpf}")
     ResponseEntity<Associated> update(@PathVariable("cpf") String cpf, @RequestBody Associated associated) {
-        Associated record = getAssociatedByCPF(cpf);
+        Associated record = repository.getOne(cpf);
         if (record == null)
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
@@ -54,10 +47,14 @@ public class AssociatedController {
 
     @DeleteMapping("/associated/del/{cpf}")
     ResponseEntity<Associated> delete(@PathVariable("cpf") String cpf) {
-        Associated record = getAssociatedByCPF(cpf);
+        Associated record = repository.getOne(cpf);
         if (record == null)
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         repository.delete(record);
         return new ResponseEntity<>(null, HttpStatus.OK);
+    }
+
+    public void clear() {
+        repository.deleteAll();
     }
 }

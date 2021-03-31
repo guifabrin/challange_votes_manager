@@ -1,11 +1,17 @@
 package com.github.guifabrin.votes.rest.v1.entities;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -24,8 +30,19 @@ public class Shedule {
 
     private Integer minutes = 1;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Collection<Vote> votes = new LinkedHashSet<Vote>();
+
     public String getDescription() {
         return description;
+    }
+
+    public Collection<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Collection<Vote> votes) {
+        this.votes = votes;
     }
 
     public Date getStartDate() {
@@ -64,4 +81,7 @@ public class Shedule {
         this.description = description;
     }
 
+    public void addVote(Vote vote) {
+        votes.add(vote);
+    }
 }
