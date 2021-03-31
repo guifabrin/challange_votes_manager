@@ -22,19 +22,19 @@ public class AssociatedController {
     @Autowired
     public AssociatedRepository repository;
 
-    @GetMapping("/associated/list")
+    @GetMapping("/api/v1/associated/list")
     List<Associated> all() {
         return repository.findAll();
     }
 
-    @PostMapping("/associated/add")
+    @PostMapping("/api/v1/associated/add")
     ResponseEntity<Associated> add(@RequestBody Associated associated) {
         if (repository.getOne(associated.getCPF()) == null)
             return new ResponseEntity<>(repository.save(associated), HttpStatus.CREATED);
         return new ResponseEntity<>(null, HttpStatus.CONFLICT);
     }
 
-    @PutMapping("/associated/edit/{cpf}")
+    @PutMapping("/api/v1/associated/edit/{cpf}")
     ResponseEntity<Associated> update(@PathVariable("cpf") String cpf, @RequestBody Associated associated) {
         Associated record = repository.getOne(cpf);
         if (record == null)
@@ -45,7 +45,7 @@ public class AssociatedController {
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
-    @DeleteMapping("/associated/del/{cpf}")
+    @DeleteMapping("/api/v1/associated/del/{cpf}")
     ResponseEntity<Associated> delete(@PathVariable("cpf") String cpf) {
         Associated record = repository.getOne(cpf);
         if (record == null)
