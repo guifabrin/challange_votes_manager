@@ -2,9 +2,15 @@ package com.github.guifabrin.votes.rest.v1.entities;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.github.guifabrin.votes.rest.v1.utils.ChyperUtils;
@@ -20,8 +26,19 @@ public class Associated {
 
     private String password = "";
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Collection<Vote> votes = new LinkedHashSet<Vote>();
+
     public String getName() {
         return name;
+    }
+
+    public Collection<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Collection<Vote> votes) {
+        this.votes = votes;
     }
 
     public String getCPF() {
@@ -42,5 +59,9 @@ public class Associated {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void addVote(Vote vote) {
+        votes.add(vote);
     }
 }
