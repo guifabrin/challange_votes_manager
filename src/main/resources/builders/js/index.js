@@ -7,7 +7,8 @@ import 'bootstrap';
 
 const HTTP_CODES = {
     NOT_FOUND: 404,
-    UNAUTHORIZED: 401
+    UNAUTHORIZED: 401,
+    CONFLICT: 409
 }
 
 new Vue({
@@ -17,7 +18,17 @@ new Vue({
         password: null,
         uuid: null,
         associateds: [],
-        shedules: []
+        shedules: [],
+        associatedName: null,
+        associatedCpf: null,
+        associatedPassword: null,
+        associatedEditing: false,
+        sheduleId: null,
+        sheduleName: null,
+        sheduleDescription: null,
+        sheduleMinutes: 1,
+        sheduleStartDate: null,
+        sheduleEditing: false
     },
     methods: {
         login: function () {
@@ -32,7 +43,7 @@ new Vue({
                         alert("Senha incorreta.")
                     if (status == HTTP_CODES.NOT_FOUND)
                         alert("Associado não encontrado.")
-                })
+                });
         },
         listAssociateds: function () {
             this.ajax("GET", `/api/v1/associated/list`, this.password,
@@ -44,6 +55,63 @@ new Vue({
                         alert("Usuário não autenticado.")
                 })
         },
+        newAssociated: function () {
+            this.ajax("POST", `/api/v1/associated/add/`,
+                JSON.stringify({
+                    cpf: this.associatedCpf,
+                    name: this.associatedName,
+                    password: this.associatedPassword
+                }),
+                () => {
+                    this.listAssociateds();
+                    this.listShedules();
+                },
+                (status) => {
+                    if (status == HTTP_CODES.UNAUTHORIZED)
+                        alert("Usuário não autenticado.")
+                    if (status == HTTP_CODES.CONFLICT)
+                        alert("Associado já cadastrado.")
+                });
+        },
+        editAssociated: function () {
+            this.ajax("PUT", `/api/v1/associated/edit/${this.associatedCpf}`,
+                JSON.stringify({
+                    name: this.associatedName,
+                    password: this.associatedPassword
+                }),
+                () => {
+                    this.listAssociateds();
+                    this.listShedules();
+                },
+                (status) => {
+                    if (status == HTTP_CODES.UNAUTHORIZED)
+                        alert("Usuário não autenticado.")
+                    if (status == HTTP_CODES.CONFLICT)
+                        alert("Associado já cadastrado.")
+                });
+        },
+        saveAssociated: function () {
+            if (this.associatedEditing) {
+                return this.editAssociated();
+            }
+            this.newAssociated();
+        },
+        removeAssociated: function (cpf) {
+            this.ajax("DELETE", `/api/v1/associated/del/${cpf}`, null,
+                () => {
+                    this.listAssociateds();
+                    this.listShedules();
+                },
+                (status) => {
+                    if (status == HTTP_CODES.UNAUTHORIZED)
+                        alert("Usuário não autenticado.")
+                })
+        },
+        clearAssociated: function () {
+            this.associatedCpf = null;
+            this.associatedName = null;
+            this.associatedPassword = null;
+        },
         listShedules: function () {
             this.ajax("GET", `/api/v1/shedule/list`, this.password,
                 (text) => {
@@ -54,10 +122,95 @@ new Vue({
                         alert("Usuário não autenticado.")
                 })
         },
+        endEditAssociated: function () {
+            this.associatedEditing = false;
+        },
+        setAssociated: function (associated) {
+            this.associatedEditing = true;
+            this.associatedCpf = associated.cpf;
+            this.associatedName = associated.name;
+            this.associatedPassword = '';
+        },
+
+        endEditShedule: function () {
+            this.sheduleEditing = false;
+        },
+        newShedule: function () {
+            this.ajax("POST", `/api/v1/shedule/add/`,
+                JSON.stringify({
+                    name: this.sheduleName,
+                    description: this.sheduleDescription,
+                    minutes: this.sheduleMinutes,
+                    startDate: this.sheduleStartDate,
+                }),
+                () => {
+                    this.listAssociateds();
+                    this.listShedules();
+                },
+                (status) => {
+                    if (status == HTTP_CODES.UNAUTHORIZED)
+                        alert("Usuário não autenticado.")
+                    if (status == HTTP_CODES.CONFLICT)
+                        alert("Associado já cadastrado.")
+                });
+        },
+        editShedule: function () {
+            this.ajax("PUT", `/api/v1/shedule/edit/${this.sheduleId}`,
+                JSON.stringify({
+                    name: this.sheduleName,
+                    description: this.sheduleDescription,
+                    minutes: this.sheduleMinutes,
+                    startDate: this.sheduleStartDate,
+                }),
+                () => {
+                    this.listAssociateds();
+                    this.listShedules();
+                },
+                (status) => {
+                    if (status == HTTP_CODES.UNAUTHORIZED)
+                        alert("Usuário não autenticado.")
+                    if (status == HTTP_CODES.CONFLICT)
+                        alert("Associado já cadastrado.")
+                });
+        },
+        clearShedule: function () {
+            this.sheduleId = null;
+            this.sheduleName = null;
+            this.sheduleDescription = null;
+            this.sheduleMinutes = 1;
+            this.sheduleStartDate = null;
+        },
+        saveShedule: function () {
+            if (this.sheduleEditing) {
+                return this.editShedule();
+            }
+            this.newShedule();
+        },
+        removeShedule: function (id) {
+            this.ajax("DELETE", `/api/v1/shedule/del/${id}`, null,
+                () => {
+                    this.listAssociateds();
+                    this.listShedules();
+                },
+                (status) => {
+                    if (status == HTTP_CODES.UNAUTHORIZED)
+                        alert("Usuário não autenticado.")
+                })
+        },
+        setShedule: function (shedule) {
+            this.sheduleEditing = true;
+            this.sheduleId = shedule.id;
+            this.sheduleName = shedule.name;
+            this.sheduleDescription = shedule.description;
+            this.sheduleMinutes = shedule.minutes;
+            this.sheduleStartDate = shedule.startDate;
+        },
+
         ajax: function (method, url, body, fnSuccess = () => { }, fnError = () => { }) {
             var xhr = new XMLHttpRequest();
             xhr.open(method, url, true);
             xhr.setRequestHeader("uuid", this.uuid);
+            xhr.setRequestHeader("Content-Type", "application/json");
             xhr.send(body);
             xhr.onreadystatechange = function () {
                 if (this.readyState != 4) return;

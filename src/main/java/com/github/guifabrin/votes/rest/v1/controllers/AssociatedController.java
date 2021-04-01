@@ -35,19 +35,22 @@ public class AssociatedController {
     @PostMapping("/api/v1/associated/add")
     ResponseEntity<Associated> add(@RequestBody Associated associated) {
         if (repository.getOne(associated.getCPF()) == null)
-            return new ResponseEntity<>(repository.save(associated), HttpStatus.CREATED);
+            return new ResponseEntity<>(repository.save(associated), HttpStatus.OK);
         return new ResponseEntity<>(null, HttpStatus.CONFLICT);
     }
 
     @PutMapping("/api/v1/associated/edit/{cpf}")
-    ResponseEntity<Associated> update(@PathVariable("cpf") String cpf, @RequestBody Associated associated) {
+    ResponseEntity<Associated> update(@PathVariable("cpf") String cpf, @RequestBody Associated associated)
+            throws UnsupportedEncodingException, NoSuchAlgorithmException {
         Associated record = repository.getOne(cpf);
         if (record == null)
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
         record.setName(associated.getName());
-        repository.save(record);
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        if (associated.getPassword() != ChyperUtils.encrypt("")) {
+            record.setEncryptedPassword(associated.getPassword());
+        }
+        return new ResponseEntity<>(repository.save(record), HttpStatus.OK);
     }
 
     @DeleteMapping("/api/v1/associated/del/{cpf}")

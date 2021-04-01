@@ -45,7 +45,7 @@ public class VoteController {
         repository.save(vote);
         associatedRepository.save(associated);
         sheduleRepository.save(shedule);
-        return new ResponseEntity<>(null, HttpStatus.CREATED);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     public void clear() {

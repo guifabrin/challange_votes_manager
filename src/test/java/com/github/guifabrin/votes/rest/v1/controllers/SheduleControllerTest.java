@@ -27,14 +27,14 @@ public class SheduleControllerTest {
 
     @Test
     void creation() throws Exception {
-        assertTrue(controller.add(getDefault()).getStatusCode() == HttpStatus.CREATED);
+        assertTrue(controller.add(getDefault()).getStatusCode() == HttpStatus.OK);
         controller.clear();
     }
 
     @Test
     void update() throws Exception {
         Shedule shedule = getDefault();
-        assertTrue(controller.add(shedule).getStatusCode() == HttpStatus.CREATED);
+        assertTrue(controller.add(shedule).getStatusCode() == HttpStatus.OK);
         assertTrue(controller.update(shedule.getId(), shedule).getStatusCode() == HttpStatus.OK);
         controller.clear();
     }
@@ -48,7 +48,7 @@ public class SheduleControllerTest {
     @Test
     void delete() throws Exception {
         Shedule shedule = getDefault();
-        assertTrue(controller.add(shedule).getStatusCode() == HttpStatus.CREATED);
+        assertTrue(controller.add(shedule).getStatusCode() == HttpStatus.OK);
         assertTrue(controller.delete(shedule.getId()).getStatusCode() == HttpStatus.OK);
     }
 

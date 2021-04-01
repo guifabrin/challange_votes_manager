@@ -87,4 +87,8 @@ public class Shedule {
     public Long getNoVotes() {
         return this.votes.stream().filter(vote -> !vote.isVote()).count();
     }
+
+    public Collection<Vote> getVotes() {
+        return this.votes;
+    }
 }

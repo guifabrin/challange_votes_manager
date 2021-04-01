@@ -29,7 +29,7 @@ public class SheduleController {
 
     @PostMapping("/api/v1/shedule/add")
     ResponseEntity<Shedule> add(@RequestBody Shedule shedule) {
-        return new ResponseEntity<>(repository.save(shedule), HttpStatus.CREATED);
+        return new ResponseEntity<>(repository.save(shedule), HttpStatus.OK);
     }
 
     @PutMapping("/api/v1/shedule/edit/{id}")

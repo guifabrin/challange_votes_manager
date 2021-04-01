@@ -56,6 +56,10 @@ public class Associated {
         this.password = ChyperUtils.encrypt(password);
     }
 
+    public void setEncryptedPassword(String password) {
+        this.password = password;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

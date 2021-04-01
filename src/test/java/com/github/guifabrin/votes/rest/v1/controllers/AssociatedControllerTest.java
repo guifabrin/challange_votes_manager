@@ -31,14 +31,14 @@ public class AssociatedControllerTest {
 
     @Test
     void creation() throws Exception {
-        assertTrue(controller.add(getDefault()).getStatusCode() == HttpStatus.CREATED);
+        assertTrue(controller.add(getDefault()).getStatusCode() == HttpStatus.OK);
         controller.clear();
     }
 
     @Test
     void duplicate() throws Exception {
         Associated associated = getDefault();
-        assertTrue(controller.add(associated).getStatusCode() == HttpStatus.CREATED);
+        assertTrue(controller.add(associated).getStatusCode() == HttpStatus.OK);
         assertTrue(controller.add(associated).getStatusCode() == HttpStatus.CONFLICT);
         controller.clear();
     }
@@ -46,7 +46,7 @@ public class AssociatedControllerTest {
     @Test
     void update() throws Exception {
         Associated associated = getDefault();
-        assertTrue(controller.add(associated).getStatusCode() == HttpStatus.CREATED);
+        assertTrue(controller.add(associated).getStatusCode() == HttpStatus.OK);
         assertTrue(controller.update(associated.getCPF(), associated).getStatusCode() == HttpStatus.OK);
         controller.clear();
     }
@@ -59,7 +59,7 @@ public class AssociatedControllerTest {
     @Test
     void delete() throws Exception {
         Associated associated = getDefault();
-        assertTrue(controller.add(associated).getStatusCode() == HttpStatus.CREATED);
+        assertTrue(controller.add(associated).getStatusCode() == HttpStatus.OK);
         assertTrue(controller.delete(associated.getCPF()).getStatusCode() == HttpStatus.OK);
     }
 
