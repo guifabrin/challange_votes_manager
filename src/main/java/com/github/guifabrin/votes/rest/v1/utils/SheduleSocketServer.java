@@ -34,7 +34,7 @@ public class SheduleSocketServer extends WebSocketServer {
     }
 
     public static void broadcastShedule() {
-        try{
+        try {
             List<Shedule> shedules = SheduleSocketServer.socket.repository.findAll();
             for (Map.Entry<String, WebSocket> pair : SheduleSocketServer.socket.connections.entrySet()) {
                 ObjectMapper objectMapper = new ObjectMapper();
@@ -50,11 +50,11 @@ public class SheduleSocketServer extends WebSocketServer {
                 });
 
                 String jsonString = objectMapper.writeValueAsString(shedules);
-                if (pair.getValue().isOpen()){
+                if (pair.getValue().isOpen()) {
                     pair.getValue().send(jsonString);
                 }
             }
-        } catch (Exception exception){
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
     }

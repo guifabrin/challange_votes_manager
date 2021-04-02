@@ -51,7 +51,7 @@ public class SheduleController {
         repository.deleteAll();
     }
 
-    private ResponseEntity notifyChange(ResponseEntity entity) {
+    private ResponseEntity<Shedule> notifyChange(ResponseEntity<Shedule> entity) {
         SheduleSocketServer.broadcastShedule();
         return entity;
     }

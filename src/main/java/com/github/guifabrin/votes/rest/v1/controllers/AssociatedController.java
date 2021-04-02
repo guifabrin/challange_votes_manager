@@ -1,13 +1,22 @@
 package com.github.guifabrin.votes.rest.v1.controllers;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
+
 import com.github.guifabrin.votes.rest.v1.entities.Associated;
+import com.github.guifabrin.votes.rest.v1.entities.Status;
 import com.github.guifabrin.votes.rest.v1.repositories.AssociatedRepository;
 import com.github.guifabrin.votes.rest.v1.utils.AuthManager;
 import com.github.guifabrin.votes.rest.v1.utils.ChyperUtils;
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +41,9 @@ public class AssociatedController {
 
     @PostMapping("/api/v1/associated/add")
     ResponseEntity<Associated> add(@RequestBody Associated associated) {
-        if (repository.getOne(associated.getCPF()) == null)
+        if (repository.getOne(associated.getCPF()) == null) {
             return new ResponseEntity<>(repository.save(associated), HttpStatus.OK);
+        }
         return new ResponseEntity<>(null, HttpStatus.CONFLICT);
     }
 
@@ -41,8 +51,9 @@ public class AssociatedController {
     ResponseEntity<Associated> update(@PathVariable("cpf") String cpf, @RequestBody Associated associated)
             throws UnsupportedEncodingException, NoSuchAlgorithmException {
         Associated record = repository.getOne(cpf);
-        if (record == null)
+        if (record == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
 
         record.setName(associated.getName());
         if (!associated.getPassword().equals(ChyperUtils.encrypt(""))) {
@@ -54,8 +65,9 @@ public class AssociatedController {
     @DeleteMapping("/api/v1/associated/del/{cpf}")
     ResponseEntity<Associated> delete(@PathVariable("cpf") String cpf) {
         Associated record = repository.getOne(cpf);
-        if (record == null)
+        if (record == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
         repository.delete(record);
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
@@ -64,13 +76,33 @@ public class AssociatedController {
     ResponseEntity<String> check(@PathVariable("cpf") String cpf, @RequestBody String password)
             throws UnsupportedEncodingException, NoSuchAlgorithmException {
         Associated record = repository.getOne(cpf);
-        if (record == null)
+        if (record == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
         boolean passwordOk = record.getPassword().equals(ChyperUtils.encrypt(password));
         if (passwordOk) {
             String uuid = UUID.randomUUID().toString();
             AuthManager.setAssociatedSession(uuid, record);
             return new ResponseEntity<>(uuid, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+    }
+
+    private Status getStatus(String url) throws Exception {
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest httpRequest = HttpRequest.newBuilder().uri(URI.create(url)).GET().build();
+        HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        return new Gson().fromJson(response.body(), Status.class);
+    }
+
+    @GetMapping("/api/v1/associated/{cpf}/able")
+    ResponseEntity<String> able(@PathVariable("cpf") String cpf) {
+        try {
+            if (this.getStatus("https://user-info.herokuapp.com/users/" + cpf).isAble()) {
+                return new ResponseEntity<>(null, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
     }
