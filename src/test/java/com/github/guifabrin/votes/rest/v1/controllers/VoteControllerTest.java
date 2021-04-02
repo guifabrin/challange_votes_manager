@@ -1,19 +1,17 @@
 package com.github.guifabrin.votes.rest.v1.controllers;
 
-import com.github.guifabrin.votes.rest.v1.components.AuthManager;
 import com.github.guifabrin.votes.rest.v1.entities.Associated;
 import com.github.guifabrin.votes.rest.v1.entities.Shedule;
 import com.github.guifabrin.votes.rest.v1.entities.Vote;
+import com.github.guifabrin.votes.rest.v1.utils.AuthManager;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Date;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
 
 @SpringBootTest
 public class VoteControllerTest {

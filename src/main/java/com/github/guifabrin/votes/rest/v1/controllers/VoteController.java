@@ -1,15 +1,14 @@
 package com.github.guifabrin.votes.rest.v1.controllers;
 
-import java.util.List;
-
-import com.github.guifabrin.votes.rest.v1.components.AuthManager;
 import com.github.guifabrin.votes.rest.v1.entities.Associated;
 import com.github.guifabrin.votes.rest.v1.entities.Shedule;
 import com.github.guifabrin.votes.rest.v1.entities.Vote;
 import com.github.guifabrin.votes.rest.v1.repositories.AssociatedRepository;
 import com.github.guifabrin.votes.rest.v1.repositories.SheduleRepository;
 import com.github.guifabrin.votes.rest.v1.repositories.VoteRepository;
-
+import com.github.guifabrin.votes.rest.v1.utils.AuthManager;
+import com.github.guifabrin.votes.rest.v1.utils.SheduleSocketServer;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,10 +44,15 @@ public class VoteController {
         repository.save(vote);
         associatedRepository.save(associated);
         sheduleRepository.save(shedule);
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return this.notifyChange(new ResponseEntity<>(null, HttpStatus.OK));
     }
 
     public void clear() {
         repository.deleteAll();
+    }
+    
+    private ResponseEntity notifyChange(ResponseEntity entity) {
+        SheduleSocketServer.broadcastShedule();
+        return entity;
     }
 }

@@ -1,7 +1,7 @@
-package com.github.guifabrin.votes.rest.v1.components;
+package com.github.guifabrin.votes.rest.v1.utils;
 
+import com.github.guifabrin.votes.rest.v1.entities.Associated;
 import java.io.IOException;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -9,9 +9,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.github.guifabrin.votes.rest.v1.entities.Associated;
-
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -25,10 +22,13 @@ public class AuthFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         String path = httpRequest.getRequestURI();
-        if (!"/".equals(path) && !path.startsWith("/api/v1/associated/login/") && !"/js/index.bundle.js".equals(path)) {
+        if (!"/".equals(path) && !path.startsWith("/api/v1/associated/login/") && !"/js/index.bundle.js".equals(path)
+                && !"/socket".startsWith(path)) {
             Associated authAssociated = AuthManager.getByUUID(httpRequest.getHeader("uuid"));
-            if (authAssociated == null)
+            if (authAssociated == null) {
                 httpResponse.sendError(HttpStatus.UNAUTHORIZED.value());
+                return;
+            }
         }
         chain.doFilter(request, httpResponse);
     }

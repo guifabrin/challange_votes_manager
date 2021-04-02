@@ -31,12 +31,21 @@ new Vue({
         sheduleEditing: false
     },
     methods: {
+        connectSocket() {
+            const ws = new WebSocket('ws://' + document.location.hostname + ":" + 8081 + '');
+            ws.onmessage = (data) => {
+                this.shedules = JSON.parse(data.data);
+            }
+            ws.onopen = () => {
+                ws.send(this.uuid);
+            }
+        },
         login: function () {
             this.ajax("POST", `/api/v1/associated/login/${this.cpf}`, this.password,
                 (uuid) => {
                     this.uuid = uuid;
                     this.listAssociateds();
-                    this.listShedules();
+                    this.connectSocket();
                 },
                 (status) => {
                     if (status == HTTP_CODES.UNAUTHORIZED)
@@ -64,7 +73,6 @@ new Vue({
                 }),
                 () => {
                     this.listAssociateds();
-                    this.listShedules();
                 },
                 (status) => {
                     if (status == HTTP_CODES.UNAUTHORIZED)
@@ -81,7 +89,6 @@ new Vue({
                 }),
                 () => {
                     this.listAssociateds();
-                    this.listShedules();
                 },
                 (status) => {
                     if (status == HTTP_CODES.UNAUTHORIZED)
@@ -100,7 +107,6 @@ new Vue({
             this.ajax("DELETE", `/api/v1/associated/del/${cpf}`, null,
                 () => {
                     this.listAssociateds();
-                    this.listShedules();
                 },
                 (status) => {
                     if (status == HTTP_CODES.UNAUTHORIZED)
@@ -111,16 +117,6 @@ new Vue({
             this.associatedCpf = null;
             this.associatedName = null;
             this.associatedPassword = null;
-        },
-        listShedules: function () {
-            this.ajax("GET", `/api/v1/shedule/list`, this.password,
-                (text) => {
-                    this.shedules = JSON.parse(text);
-                },
-                (status) => {
-                    if (status == HTTP_CODES.UNAUTHORIZED)
-                        alert("Usuário não autenticado.")
-                })
         },
         endEditAssociated: function () {
             this.associatedEditing = false;
@@ -145,7 +141,6 @@ new Vue({
                 }),
                 () => {
                     this.listAssociateds();
-                    this.listShedules();
                 },
                 (status) => {
                     if (status == HTTP_CODES.UNAUTHORIZED)
@@ -164,7 +159,6 @@ new Vue({
                 }),
                 () => {
                     this.listAssociateds();
-                    this.listShedules();
                 },
                 (status) => {
                     if (status == HTTP_CODES.UNAUTHORIZED)
@@ -190,7 +184,6 @@ new Vue({
             this.ajax("DELETE", `/api/v1/shedule/del/${id}`, null,
                 () => {
                     this.listAssociateds();
-                    this.listShedules();
                 },
                 (status) => {
                     if (status == HTTP_CODES.UNAUTHORIZED)
@@ -204,6 +197,20 @@ new Vue({
             this.sheduleDescription = shedule.description;
             this.sheduleMinutes = shedule.minutes;
             this.sheduleStartDate = shedule.startDate;
+        },
+
+        sheduleVote: function (id) {
+            this.ajax("POST", `/api/v1/vote/${id}`,
+                JSON.stringify({
+                    vote: confirm('Votar sim?'),
+                }),
+                () => {},
+                (status) => {
+                    if (status == HTTP_CODES.UNAUTHORIZED)
+                        alert("Usuário não autenticado.")
+                    if (status == HTTP_CODES.CONFLICT)
+                        alert("Associado já cadastrado.")
+                });
         },
 
         ajax: function (method, url, body, fnSuccess = () => { }, fnError = () => { }) {

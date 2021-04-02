@@ -1,13 +1,12 @@
 package com.github.guifabrin.votes.rest.v1.controllers;
 
 import com.github.guifabrin.votes.rest.v1.entities.Shedule;
+import java.util.Date;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import java.util.Date;
 
 @SpringBootTest
 public class SheduleControllerTest {

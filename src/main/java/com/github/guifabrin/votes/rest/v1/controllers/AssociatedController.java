@@ -1,15 +1,13 @@
 package com.github.guifabrin.votes.rest.v1.controllers;
 
+import com.github.guifabrin.votes.rest.v1.entities.Associated;
+import com.github.guifabrin.votes.rest.v1.repositories.AssociatedRepository;
+import com.github.guifabrin.votes.rest.v1.utils.AuthManager;
+import com.github.guifabrin.votes.rest.v1.utils.ChyperUtils;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.UUID;
-
-import com.github.guifabrin.votes.rest.v1.components.AuthManager;
-import com.github.guifabrin.votes.rest.v1.entities.Associated;
-import com.github.guifabrin.votes.rest.v1.repositories.AssociatedRepository;
-import com.github.guifabrin.votes.rest.v1.utils.ChyperUtils;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +45,7 @@ public class AssociatedController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
         record.setName(associated.getName());
-        if (associated.getPassword() != ChyperUtils.encrypt("")) {
+        if (!associated.getPassword().equals(ChyperUtils.encrypt(""))) {
             record.setEncryptedPassword(associated.getPassword());
         }
         return new ResponseEntity<>(repository.save(record), HttpStatus.OK);

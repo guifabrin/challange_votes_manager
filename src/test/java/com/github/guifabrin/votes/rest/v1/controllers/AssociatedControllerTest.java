@@ -1,14 +1,13 @@
 package com.github.guifabrin.votes.rest.v1.controllers;
 
 import com.github.guifabrin.votes.rest.v1.entities.Associated;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 
 @SpringBootTest
 public class AssociatedControllerTest {

@@ -1,9 +1,8 @@
-package com.github.guifabrin.votes.rest.v1.components;
-
-import java.util.HashMap;
-import java.util.Map.Entry;
+package com.github.guifabrin.votes.rest.v1.utils;
 
 import com.github.guifabrin.votes.rest.v1.entities.Associated;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class AuthManager {
     private static HashMap<String, Associated> auths = new HashMap<>();
