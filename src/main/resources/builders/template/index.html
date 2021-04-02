@@ -87,7 +87,7 @@
                                         @click="removeShedule(shedule.id)">Excluir</button>
                                     <button type="button" class="btn btn-warning" data-bs-toggle="modal"
                                         data-bs-target="#sheduleModal" @click="setShedule(shedule)">Editar</button>
-                                    <button type="button" class="btn btn-primary" v-if="!shedule.voted"
+                                    <button type="button" class="btn btn-primary" v-if="!shedule.voted && ableToVote"
                                         @click="sheduleVote(shedule.id)">Votar</button>
                                 </td>
                             </tr>
