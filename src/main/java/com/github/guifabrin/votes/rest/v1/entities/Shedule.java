@@ -3,16 +3,15 @@ package com.github.guifabrin.votes.rest.v1.entities;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashSet;
-import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "shedule")
@@ -29,16 +28,23 @@ public class Shedule {
     private Date startDate;
 
     private Integer minutes = 1;
+    
+    @Transient
+    private boolean voted;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Collection<Vote> votes = new LinkedHashSet<Vote>();
 
     public String getDescription() {
         return description;
     }
 
-    public Collection<Vote> getVotes() {
-        return votes;
+    public boolean isVoted() {
+        return voted;
+    }
+
+    public void setVoted(boolean voted) {
+        this.voted = voted;
     }
 
     public void setVotes(Collection<Vote> votes) {
@@ -83,5 +89,17 @@ public class Shedule {
 
     public void addVote(Vote vote) {
         votes.add(vote);
+    }
+
+    public Long getYesVotes() {
+        return this.votes.stream().filter(vote -> vote.isVote()).count();
+    }
+
+    public Long getNoVotes() {
+        return this.votes.stream().filter(vote -> !vote.isVote()).count();
+    }
+
+    public Collection<Vote> getVotes() {
+        return this.votes;
     }
 }

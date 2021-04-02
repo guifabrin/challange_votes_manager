@@ -1,14 +1,13 @@
 package com.github.guifabrin.votes.rest.v1.controllers;
 
 import com.github.guifabrin.votes.rest.v1.entities.Associated;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 
 @SpringBootTest
 public class AssociatedControllerTest {
@@ -31,14 +30,14 @@ public class AssociatedControllerTest {
 
     @Test
     void creation() throws Exception {
-        assertTrue(controller.add(getDefault()).getStatusCode() == HttpStatus.CREATED);
+        assertTrue(controller.add(getDefault()).getStatusCode() == HttpStatus.OK);
         controller.clear();
     }
 
     @Test
     void duplicate() throws Exception {
         Associated associated = getDefault();
-        assertTrue(controller.add(associated).getStatusCode() == HttpStatus.CREATED);
+        assertTrue(controller.add(associated).getStatusCode() == HttpStatus.OK);
         assertTrue(controller.add(associated).getStatusCode() == HttpStatus.CONFLICT);
         controller.clear();
     }
@@ -46,7 +45,7 @@ public class AssociatedControllerTest {
     @Test
     void update() throws Exception {
         Associated associated = getDefault();
-        assertTrue(controller.add(associated).getStatusCode() == HttpStatus.CREATED);
+        assertTrue(controller.add(associated).getStatusCode() == HttpStatus.OK);
         assertTrue(controller.update(associated.getCPF(), associated).getStatusCode() == HttpStatus.OK);
         controller.clear();
     }
@@ -59,7 +58,7 @@ public class AssociatedControllerTest {
     @Test
     void delete() throws Exception {
         Associated associated = getDefault();
-        assertTrue(controller.add(associated).getStatusCode() == HttpStatus.CREATED);
+        assertTrue(controller.add(associated).getStatusCode() == HttpStatus.OK);
         assertTrue(controller.delete(associated.getCPF()).getStatusCode() == HttpStatus.OK);
     }
 
