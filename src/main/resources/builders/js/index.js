@@ -28,7 +28,8 @@ new Vue({
         sheduleDescription: null,
         sheduleMinutes: 1,
         sheduleStartDate: null,
-        sheduleEditing: false
+        sheduleEditing: false,
+        ableToVote: false
     },
     methods: {
         connectSocket() {
@@ -46,6 +47,11 @@ new Vue({
                     this.uuid = uuid;
                     this.listAssociateds();
                     this.connectSocket();
+                    this.ajax("GET", `/api/v1/associated/${this.cpf}/able`, null, (data) => {
+                        this.ableToVote = true;
+                    }, () => {
+                        alert('Você não pode votar.')
+                    });
                 },
                 (status) => {
                     if (status == HTTP_CODES.UNAUTHORIZED)
@@ -204,7 +210,7 @@ new Vue({
                 JSON.stringify({
                     vote: confirm('Votar sim?'),
                 }),
-                () => {},
+                () => { },
                 (status) => {
                     if (status == HTTP_CODES.UNAUTHORIZED)
                         alert("Usuário não autenticado.")

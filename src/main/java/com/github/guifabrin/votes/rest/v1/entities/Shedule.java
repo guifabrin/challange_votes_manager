@@ -28,7 +28,7 @@ public class Shedule {
     private Date startDate;
 
     private Integer minutes = 1;
-    
+
     @Transient
     private boolean voted;
 

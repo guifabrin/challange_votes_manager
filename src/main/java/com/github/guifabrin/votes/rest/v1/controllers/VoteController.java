@@ -50,8 +50,8 @@ public class VoteController {
     public void clear() {
         repository.deleteAll();
     }
-    
-    private ResponseEntity notifyChange(ResponseEntity entity) {
+
+    private ResponseEntity<Vote> notifyChange(ResponseEntity<Vote> entity) {
         SheduleSocketServer.broadcastShedule();
         return entity;
     }
