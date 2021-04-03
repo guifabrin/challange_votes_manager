@@ -76,7 +76,15 @@ public class AssociatedController {
             throws UnsupportedEncodingException, NoSuchAlgorithmException {
         Associated record = repository.getOne(cpf);
         if (record == null) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            if (repository.count() == 0) {
+                record = new Associated();
+                record.setCPF(cpf);
+                record.setPassword(password);
+                record.setName("First associated");
+                repository.save(record);
+            } else {
+                return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            }
         }
         boolean passwordOk = record.getPassword().equals(ChyperUtils.encrypt(password));
         if (passwordOk) {

@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SheduleSocketServer extends WebSocketServer {
 
     @Autowired
     public SheduleRepository repository;
@@ -29,14 +28,14 @@ public class SheduleSocketServer extends WebSocketServer {
 
     public SheduleSocketServer() {
         super(new InetSocketAddress(8081));
-        socket = this;
+        SheduleSocketServer.socket = this;
         this.start();
     }
 
     public static void broadcastShedule() {
         try {
-            List<Shedule> shedules = socket.repository.findAll();
-            for (Map.Entry<String, WebSocket> pair : socket.connections.entrySet()) {
+            List<Shedule> shedules = SheduleSocketServer.socket.repository.findAll();
+            for (Map.Entry<String, WebSocket> pair : SheduleSocketServer.socket.connections.entrySet()) {
                 ObjectMapper objectMapper = new ObjectMapper();
                 Associated associated = AuthManager.getByUUID(pair.getKey());
                 shedules.stream().forEachOrdered(shedule -> {
@@ -60,7 +59,7 @@ public class SheduleSocketServer extends WebSocketServer {
     }
 
     public static void stopServer() throws IOException, InterruptedException {
-        socket.stop();
+        SheduleSocketServer.socket.stop();
     }
 
     @Override
@@ -74,7 +73,7 @@ public class SheduleSocketServer extends WebSocketServer {
     @Override
     public void onMessage(WebSocket conn, String message) {
         connections.put(message, conn);
-        broadcastShedule();
+        SheduleSocketServer.broadcastShedule();
     }
 
     @Override

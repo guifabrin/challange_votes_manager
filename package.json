@@ -18,8 +18,12 @@
         "sass": "src/main/resources/scss/**"
     },
     "scripts": {
-        "build": "webpack --config webpack.config.js --mode=production",
-        "watch": "webpack --config webpack.config.js --mode=development --watch"
+        "build": "npm run webpack-build && npm run maven-build",
+        "maven-build": "mvnw clean package spring-boot:repackage",
+        "maven-run": "mvnw spring-boot:run",
+        "maven-test": "mvnw test",
+        "webpack-build": "webpack --config webpack.config.js --mode=production",
+        "webpack-watch": "webpack --config webpack.config.js --mode=development --watch"
     },
     "dependencies": {
         "sockjs-client": "^1.5.1"
