@@ -74,7 +74,7 @@ public class SheduleSocketServer extends WebSocketServer {
     @Override
     public void onMessage(WebSocket conn, String message) {
         connections.put(message, conn);
-        this.broadcastShedule();
+        SheduleSocketServer.broadcastShedule();
     }
 
     @Override
