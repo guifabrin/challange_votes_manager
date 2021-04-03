@@ -29,14 +29,14 @@ public class SheduleSocketServer extends WebSocketServer {
 
     public SheduleSocketServer() {
         super(new InetSocketAddress(8081));
-        SheduleSocketServer.socket = this;
+        socket = this;
         this.start();
     }
 
     public static void broadcastShedule() {
         try {
-            List<Shedule> shedules = SheduleSocketServer.socket.repository.findAll();
-            for (Map.Entry<String, WebSocket> pair : SheduleSocketServer.socket.connections.entrySet()) {
+            List<Shedule> shedules = socket.repository.findAll();
+            for (Map.Entry<String, WebSocket> pair : socket.connections.entrySet()) {
                 ObjectMapper objectMapper = new ObjectMapper();
                 Associated associated = AuthManager.getByUUID(pair.getKey());
                 shedules.stream().forEachOrdered(shedule -> {
@@ -60,7 +60,7 @@ public class SheduleSocketServer extends WebSocketServer {
     }
 
     public static void stopServer() throws IOException, InterruptedException {
-        SheduleSocketServer.socket.stop();
+        socket.stop();
     }
 
     @Override
@@ -74,7 +74,7 @@ public class SheduleSocketServer extends WebSocketServer {
     @Override
     public void onMessage(WebSocket conn, String message) {
         connections.put(message, conn);
-        SheduleSocketServer.broadcastShedule();
+        broadcastShedule();
     }
 
     @Override
