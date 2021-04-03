@@ -14,7 +14,6 @@ import com.github.guifabrin.votes.rest.v1.repositories.AssociatedRepository;
 import com.github.guifabrin.votes.rest.v1.utils.AuthManager;
 import com.github.guifabrin.votes.rest.v1.utils.ChyperUtils;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
