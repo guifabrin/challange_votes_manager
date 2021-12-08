@@ -26,6 +26,6 @@
         "webpack-watch": "webpack --config webpack.config.js --mode=development --watch"
     },
     "dependencies": {
-        "sockjs-client": "^1.5.1"
+        "sockjs-client": "1.5.2"
     }
 }
