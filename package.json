@@ -11,7 +11,7 @@
         "sass-loader": "^11.0.1",
         "style-loader": "^2.0.0",
         "vue": "^2.6.12",
-        "webpack": "^5.28.0",
+        "webpack": "5.65.0",
         "webpack-cli": "^4.6.0"
     },
     "watches": {
